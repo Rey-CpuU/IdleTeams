@@ -86,6 +86,23 @@ token/secret env var. Jangan expose server secret ke browser bundle.
 Jangan log secret. Kalau inspeksi `.env`, jangan reveal nilai secret-nya —
 pakai `.env.example` sebagai referensi.
 
+## SECRET SCANNING OTOMATIS
+Disiplin manual ("jangan hardcode secret") tidak cukup sebagai satu-
+satunya lapisan proteksi — tetap bisa lolos. Kalau project punya CI/CD
+atau pre-commit hook setup:
+- Cek apakah sudah ada tool secret-scanning terpasang (gitleaks,
+  trufflehog, detect-secrets, atau sejenisnya) — jangan asumsikan ada,
+  inspeksi config CI/pre-commit dulu.
+- Kalau belum ada dan project punya CI yang aktif dipakai: usulkan
+  penambahan sebagai improvement terpisah ke user — jangan pasang
+  sendiri tanpa izin (ini perubahan infra, ikuti aturan konfirmasi di
+  `multi-agent.md §FILE MODIFICATION RULES`).
+- Kalau menemukan hasil scan menunjukkan secret yang sudah ke-commit di
+  history Git: JANGAN coba hapus/rewrite history sendiri (destruktif,
+  butuh otorisasi — lihat SKILL.md §6). Laporkan temuan ke user dengan
+  jelas, biarkan user putuskan langkah selanjutnya (rotate secret,
+  rewrite history, dst).
+
 ## SSRF & FILE UPLOAD
 **SSRF**: kalau app fetch URL user-controlled, evaluasi risiko — validasi
 URL, batasi protocol, blokir private IP, batasi localhost, lindungi

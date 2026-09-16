@@ -184,6 +184,27 @@ tanpa perlu user mengulang instruksi.
 - Lesson baru yang kontradiksi dengan lesson lama: buat lesson baru
   dengan catatan "supersedes lesson NNN".
 
+### Konsolidasi Lesson (saat jumlah file membesar)
+Kalau `references/lessons/` sudah berisi lebih dari ~20 file, load semua
+lesson di awal tiap invocation jadi mahal. Lakukan konsolidasi (bukan
+penghapusan):
+
+1. Kelompokkan lesson yang topiknya sama/berdekatan (contoh: semua
+   lesson soal Lighthouse/performance jadi satu grup).
+2. Buat SATU file gabungan baru per grup (contoh:
+   `references/lessons/000-performance-lessons-consolidated.md`) yang
+   merangkum inti tiap lesson lama dalam grup itu — TETAP simpan detail
+   penting (kesalahan yang dihindari, hasil/bukti), jangan buang
+   informasi, cuma dipadatkan.
+3. Lesson file individual yang sudah dikonsolidasi: tandai judulnya
+   `[CONSOLIDATED INTO 000-performance-lessons-consolidated.md]` — JANGAN
+   dihapus (tetap ikuti aturan "jangan hapus lesson" di atas).
+4. Proses load di awal invocation: baca file gabungan dulu untuk
+   quick-scan; hanya buka lesson individual lama kalau file gabungan
+   tidak cukup detail untuk task saat ini.
+5. Lakukan konsolidasi ini sebagai task terpisah, bukan otomatis di
+   tengah task lain yang tidak terkait.
+
 ### Yang TIDAK Boleh Dilakukan
 - ❌ Edit/modify/hapus konten dari file reference yang sudah ada
   (qa-team.md, performance-team.md, backend-team.md, dll.) untuk

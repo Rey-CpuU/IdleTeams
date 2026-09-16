@@ -21,6 +21,27 @@ Jangan expose stack trace, detail internal database, credential, atau
 detail implementasi privat ke response. Response API harus konsisten &
 predictable.
 
+## REALTIME / WEBSOCKET (jika project pakai WebSocket/SSE)
+Inspeksi implementasi realtime yang sudah ada (library, server config)
+sebelum ubah/tambah — jangan asumsikan arsitektur.
+
+- **Connection lifecycle**: handle connect, disconnect (sengaja maupun
+  tidak sengaja/network drop), reconnect dengan backoff (jangan
+  reconnect langsung berulang tanpa delay — bisa bikin thundering herd
+  ke server).
+- **Scaling**: kalau lebih dari satu instance server, pastikan ada
+  mekanisme broadcast antar-instance (pub/sub, message broker existing)
+  — jangan asumsikan semua koneksi ada di satu proses yang sama.
+- **Backpressure**: kalau client lambat consume message, pastikan server
+  tidak menumpuk queue tanpa batas (bisa habiskan memory) — pakai limit/
+  drop-policy yang wajar.
+- **Auth per-connection**: validasi auth saat koneksi dibuka DAN
+  pertimbangkan re-validasi kalau koneksi long-lived (token bisa
+  expired di tengah sesi).
+- Jangan perkenalkan message broker/pub-sub baru (Redis pub/sub, RabbitMQ,
+  dst) kecuali sudah ada kebutuhan nyata yang terukur — ikuti prinsip
+  Core Discipline §F (Don't Overengineer).
+
 ## SEBELUM TAMBAH DEPENDENCY BARU
 Cek apakah sudah ada di project → cek apakah kode existing sudah cukup →
 verifikasi kompatibilitas package manager → pertimbangkan security &
@@ -48,6 +69,23 @@ response field, algoritma signing, atau jaminan retry.
   constant-time comparison untuk MAC custom. Cegah replay/duplikasi pakai
   event ID + dedup + transactional state change. Expect retry/duplikasi/
   delivery telat/out-of-order.
+
+## TESTING DENGAN THIRD-PARTY API BERBAYAR/QUOTA-LIMITED
+Untuk API eksternal yang berbayar per-call atau punya quota ketat
+(contoh: LLM API, Google Maps, SMS gateway):
+
+- Cek dulu apakah provider punya sandbox/test mode gratis — pakai itu
+  untuk development & test, bukan production key.
+- Untuk unit/integration test: mock response API (jangan panggil API
+  asli) — pastikan mock mencerminkan shape response nyata (cek
+  dokumentasi provider, jangan mengarang field).
+- Untuk E2E test yang genuinely perlu panggil API asli: batasi jumlah
+  panggilan (jangan loop test yang manggil API berkali-kali tanpa
+  perlu), dan pastikan pakai key test/sandbox kalau tersedia.
+- Kalau task butuh verifikasi manual sekali panggil API asli buat
+  memastikan integrasi jalan: informasikan ke user dulu kalau ini akan
+  makan quota/biaya, terutama kalau key yang dipakai adalah production
+  key.
 
 ## API VERSIONING (untuk API publik atau consumer yang deploy independen)
 Pakai strategi versioning eksplisit hanya kalau memang butuh coexist

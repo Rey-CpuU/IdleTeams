@@ -15,6 +15,17 @@ call, ukuran DOM, animasi berlebihan, operasi blocking.
 Performance query, index, ukuran payload, request tak perlu, peluang
 caching, concurrency.
 
+## CONCURRENCY DETAIL (extend dari BACKEND CHECKS — referensi untuk qa-team.md §LOAD/STRESS TESTING)
+- Cek apakah operasi yang sensitif terhadap concurrency (checkout,
+  update stok, submit form massal) sudah pakai locking/transaction yang
+  tepat (row-level lock, optimistic locking dengan version field, atau
+  mekanisme sesuai database yang dipakai).
+- Cek connection pool & worker/thread limit tidak exhaust saat banyak
+  request bersamaan (lihat juga `§SERVER & DATABASE METRICS` di bawah).
+- Untuk load testing: kolaborasi dengan QA (`qa-team.md §LOAD/STRESS
+  TESTING`) — Performance team fokus analisis root cause kalau ada
+  bottleneck yang ketemu saat load test, QA fokus menjalankan test-nya.
+
 ## CORE WEB VITALS (extend dari checks di atas dengan target terukur)
 Inspeksi baseline existing, device/network yang didukung, route penting,
 dan monitoring yang ada sebelum optimasi.

@@ -77,6 +77,27 @@ nilai SQL/konten user).
 kebutuhan, sinkronkan waktu, konfigurasi rotation/retention/deletion.
 Jangan biarkan event security/audit hilang diam-diam.
 
+## BACKUP & DISASTER RECOVERY
+Berlaku untuk task yang menyentuh strategi backup/recovery database atau
+infrastruktur production.
+
+- **Inspeksi dulu**: cek apakah sudah ada mekanisme backup (managed
+  database backup dari provider, cron job custom, dst) — jangan
+  asumsikan tidak ada atau asumsikan sudah cukup tanpa cek.
+- **Frekuensi**: tentukan berdasar toleransi kehilangan data project
+  (RPO — Recovery Point Objective). Kalau tidak terdokumentasi, ini
+  keputusan bisnis — tanya user, jangan asumsikan angka sendiri.
+- **Testing restore**: backup yang belum pernah dites restore-nya sama
+  dengan tidak punya backup. Kalau ada kesempatan, verifikasi restore
+  bisa jalan (di environment terisolasi, bukan production) — jangan
+  klaim "backup aman" tanpa ini.
+- **RTO** (Recovery Time Objective — seberapa cepat harus pulih setelah
+  insiden): juga keputusan bisnis, dokumentasikan kalau user sudah
+  punya angka target.
+- Jangan lakukan perubahan konfigurasi backup/retention di production
+  tanpa otorisasi eksplisit (ikuti SKILL.md §6 Destructive Action
+  Policy — mengurangi retention backup adalah operasi berisiko).
+
 ## FEATURE FLAGS
 Pakai feature flag saat rollout bertahap, kill switch operasional,
 eksperimen terkontrol, atau decoupling deploy/release benar-benar

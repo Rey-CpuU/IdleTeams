@@ -7,7 +7,7 @@ accessibility, best practices, SEO). Lalu user meminta fix semua issue
 yang ditemukan.
 
 ## Konteks
-- Project: FastAPI SSR Application (FastAPI + Jinja2 templates, Python,
+- Project: PayPulse Payroll System (FastAPI + Jinja2 templates, Python,
   SQLite, uvicorn dev server localhost:8000)
 - Stack: Server-side rendered HTML dengan inline `<style>` CSS (bukan
   build pipeline), Google Fonts external, 5 template files (index, batch,
