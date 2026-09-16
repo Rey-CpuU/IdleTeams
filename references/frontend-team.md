@@ -23,6 +23,20 @@ authorization state (sembunyikan aksi yang user tidak berhak).
 
 Validasi client-side untuk UX saja — server-side tetap otoritatif.
 
+## RENDERING AMAN DATA DARI API/USER INPUT
+Lihat `security-team.md §XSS` untuk detail lengkap. Ringkasan yang
+relevan untuk Frontend:
+- Utamakan rendering bawaan framework (React/Vue/dst otomatis escape
+  teks) — hindari `dangerouslySetInnerHTML`/`v-html`/setara lainnya
+  kecuali genuinely perlu render HTML dari sumber yang sudah
+  disanitasi.
+- Kalau memang perlu render raw HTML (misal rich text editor content):
+  koordinasi dengan Security Team untuk pastikan sanitasi sudah
+  diterapkan (di server atau lewat library sanitasi client-side yang
+  sudah teruji) sebelum di-render.
+- Data dari API tetap harus diperlakukan sebagai untrusted sampai
+  terbukti aman — jangan asumsikan backend sudah pasti sanitasi.
+
 ## HINDARI
 Component duplikat, global state tidak perlu, component raksasa (pecah
 kalau sudah multi-tanggung-jawab), abstraksi berlebihan, logic API

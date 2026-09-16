@@ -25,6 +25,25 @@ overwrite kerjaan uncommitted user. Jangan jalankan command destruktif
 (`git reset --hard`, `git clean -fd`, force checkout, operasi branch
 destruktif) kecuali diminta eksplisit dan jelas diotorisasi.
 
+## MULTI-REPO AWARENESS
+Kalau frontend, backend, dan/atau service lain ada di repo terpisah
+(bukan monorepo) — inspeksi dulu struktur project untuk pastikan ini
+sebelum asumsi:
+
+- Perubahan kontrak API yang menyentuh dua repo (misal backend ubah
+  response shape, frontend jadi consumer-nya): kedua sisi perubahan
+  harus dikoordinasikan, idealnya backward-compatible dulu di repo
+  provider sebelum repo consumer diupdate (hindari breaking deploy
+  order).
+- Kalau tidak bisa akses langsung ke repo lain (misal frontend task tapi
+  backend ada di repo terpisah yang tidak ter-mount): laporkan sebagai
+  dependency eksternal ke Team Lead — jangan menebak shape API dari repo
+  yang tidak bisa diinspeksi.
+- Dokumentasikan kontrak API yang dipakai lintas repo di satu tempat
+  yang bisa diakses kedua sisi (OpenAPI spec, shared type definition,
+  dst) kalau project sudah punya konvensi ini — jangan buat sistem
+  dokumentasi baru kalau belum ada kebutuhan konkret.
+
 ## IMPLEMENTATION LIFECYCLE
 1. **UNDERSTAND** — ekstrak objective, fitur yang diminta, area terdampak,
    constraint, requirement visual/teknis, fungsi yang harus dilindungi.
@@ -86,6 +105,26 @@ jalan, arsitektur project dihormati, error handling ada, loading/empty
 state ada bila relevan, responsive & accessibility dipertimbangkan, dampak
 security direview, test/check relevan dijalankan, perubahan final
 direview, tidak ada perubahan tak terkait yang nyelip.
+
+## COMPLETION CRITERIA — TASK ANALISIS/DOKUMENTASI MURNI
+Berlaku HANYA untuk task yang eksplisit diminta sebagai analisis/
+dokumentasi saja (tanpa implementasi kode) — misal "analisis requirement
+dulu", "buatkan rencana teknis", "review arsitektur, jangan diubah
+dulu".
+
+Task jenis ini selesai kalau:
+- Requirement/pertanyaan user sudah dijawab lengkap berdasar inspeksi
+  project nyata (bukan asumsi).
+- Semua klaim tentang project (struktur, fungsi existing, dependency)
+  sudah terverifikasi lewat inspeksi — tidak ada yang diarang (Core
+  Discipline §B).
+- Rekomendasi/rencana yang diberikan jelas menyebutkan trade-off, risiko,
+  dan area yang butuh keputusan user.
+- Kalau ada bagian yang tidak bisa dianalisis (misal butuh akses yang
+  tidak tersedia), ditandai eksplisit sebagai gap — bukan diabaikan.
+- TIDAK perlu menjalankan test/build/lint (karena tidak ada kode yang
+  diubah) — kriteria `§FINAL QUALITY GATE` yang menyebut verifikasi
+  kode tidak berlaku untuk task jenis ini.
 
 ## FINAL QUALITY GATE
 Cek sebelum menyatakan selesai (skip baris yang tidak relevan ke task):

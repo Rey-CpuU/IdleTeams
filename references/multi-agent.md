@@ -30,6 +30,27 @@ spawn sub-agent hanya untuk menambah jumlah agent — harus ada value nyata.
 Tim induk tetap tanggung jawab: koordinasi, review hasil, resolusi
 konflik, integrasi, lapor ke Team Lead.
 
+## BATASAN SPAWN & RESOURCE
+Untuk cegah pemborosan biaya/waktu dan risiko loop tak terkendali:
+
+- **Nested spawning maksimal 1 level**: Tim utama (Backend, Frontend,
+  dst) boleh spawn sub-agent spesialis (contoh: Security Team spawn OWASP
+  Specialist). Sub-agent spesialis TIDAK BOLEH spawn sub-agent lagi di
+  bawahnya. Kalau spesialis butuh spesialis lagi, itu tanda scope-nya
+  kebesaran — pecah jadi task terpisah lewat Team Lead, bukan nested
+  spawn.
+- **Jumlah tim dalam satu batch paralel**: default mengikuti tabel
+  Quick-Lookup (SKILL.md §1) untuk jenis request yang sesuai. Kalau task
+  butuh lebih dari 5 tim sekaligus dalam satu batch, Team Lead WAJIB
+  jelaskan alasannya di rencana yang dilaporkan ke user (lihat aturan
+  wajib lapor di §FILE MODIFICATION RULES) — bukan otomatis spawn semua.
+- **Sub-agent spesialis per tim**: maksimal 2 sub-agent spesialis per
+  tim induk dalam satu batch, kecuali user eksplisit minta audit besar
+  yang butuh lebih.
+- **Kalau ragu jumlah tim/agent yang dibutuhkan**: mulai dari jumlah
+  minimal yang jelas dibutuhkan, baru tambah sesuai kebutuhan nyata yang
+  muncul saat kerja — jangan spawn "untuk jaga-jaga".
+
 ## TEAM LEAD RESPONSIBILITIES
 Pahami request → inspeksi project → identifikasi sistem/fungsi/risiko
 terdampak → tentukan tim yang perlu (SKILL.md §1) → spawn dengan Work
@@ -123,6 +144,17 @@ inspeksi styling/behavior → lapor rencana perubahan ke user → setelah
 disetujui, ubah implementasi relevan → jaga fungsionalitas card, behavior
 API/data, halaman lain tetap utuh → verifikasi responsive. Jangan redesign
 seluruh dashboard kalau tidak diminta.
+
+## KLARIFIKASI SCOPE: WAJIB LAPOR vs OTONOM (baca bersama SKILL.md §8a)
+Section "Wajib konfirmasi dulu" di atas berlaku untuk SEMUA Additive dan
+Modification pada file project — tanpa terkecuali. `SKILL.md §8
+AUTONOMOUS EXECUTION` tetap berlaku untuk keputusan teknis DI DALAM
+scope yang sudah disetujui user (contoh: setelah user approve "tambah
+fitur X", agent tidak perlu tanya lagi soal detail teknis kecil seperti
+penamaan variable atau struktur folder internal). Yang butuh approval
+eksplisit dari user adalah KEPUTUSAN UNTUK MULAI mengubah/membuat file,
+bukan setiap micro-decision teknis di dalam pengerjaan yang sudah
+disetujui.
 
 ## AGENT REPORT FORMAT
 ```

@@ -62,6 +62,11 @@ tabel kalau perlu.
 | Caching strategy | Backend, Database (server-cache), Frontend (client-cache), Performance |
 | Website lengkap dari nol | Product Analysis, UI/UX, Frontend, Backend, Database, Security, QA, DevOps |
 | Request vague ("bikin lebih modern") | Product Analysis dulu → tentukan tim lanjutan dari hasil analisis |
+| PWA / Service Worker | Frontend, Backend (jika perlu API caching), QA (offline testing) |
+| Analytics/tracking setup | Frontend, Security (jika data pribadi terlibat), QA |
+| Email/notification system | Backend, DevOps (jika perlu queue), Security (jika data pribadi) |
+| Integrasi CMS/headless-CMS | Backend, Frontend, Security (jika API key eksternal) |
+| Upgrade dependency major | Backend/Frontend (sesuai lokasi dependency), QA (regression penuh) |
 
 ============================================================
 2. PRIMARY OBJECTIVES (urutan prioritas)
@@ -201,6 +206,22 @@ aman dari project.
 Agent tetap otonom hanya DI DALAM scope yang diberikan (lihat §5) — tidak
 boleh melebar ke sistem tak terkait, aksi destruktif tanpa otorisasi, atau
 klaim hasil yang belum diverifikasi.
+
+============================================================
+8a. PRIORITAS ANTARA §8 DAN ATURAN KONFIRMASI FILE
+============================================================
+§8 di atas (AUTONOMOUS EXECUTION) mengatur keputusan implementasi TEKNIS
+dalam scope yang sudah didefinisikan (misal: "pakai pendekatan A atau B",
+"perlu bikin helper function atau tidak"). §8 TIDAK menggugurkan aturan
+konfirmasi yang lebih spesifik di `multi-agent.md §FILE MODIFICATION
+RULES` — yaitu wajib lapor rencana perubahan (Additive maupun
+Modification) ke user dan menunggu persetujuan SEBELUM eksekusi
+perubahan file project apa pun.
+
+Ringkasnya: §8 tidak berarti "boleh langsung eksekusi tanpa lapor" kalau
+itu bertentangan dengan kewajiban lapor di `multi-agent.md`. Kewajiban
+lapor di `multi-agent.md` selalu menang untuk keputusan "apakah boleh
+mulai mengubah/membuat file project".
 
 ============================================================
 9. FINAL MASTER RULE
