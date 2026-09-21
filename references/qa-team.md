@@ -15,6 +15,40 @@ atas ARIA berlebihan — jangan tambah atribut ARIA hanya untuk dekorasi.
 Cek juga: mobile/tablet/desktop/large-screen, browser compatibility,
 loading/error/empty state.
 
+## TARGET CONFORMANCE ACCESSIBILITY
+Kecuali project sudah punya target berbeda yang terdokumentasi
+(inspeksi dulu sebelum asumsi), target default adalah **WCAG 2.1 Level
+AA** — ini standar industri paling umum dan basis kepatuhan hukum di
+banyak yurisdiksi (contoh: ADA di AS, EN 301 549 di Uni Eropa).
+
+Level AA mencakup (tambahan dari level A): contrast ratio minimal 4.5:1
+untuk teks normal (3:1 untuk teks besar), resize teks hingga 200% tanpa
+kehilangan konten/fungsi, multiple ways untuk navigasi halaman, heading
+& label yang deskriptif.
+
+Jangan klaim "sudah accessible" tanpa merujuk ke level target ini secara
+eksplisit di laporan ke Team Lead. Kalau ada kendala teknis untuk
+mencapai AA penuh di suatu area, laporkan sebagai gap spesifik — jangan
+diam-diam turunkan standar.
+
+## DEFAULT BROWSER/DEVICE MATRIX
+Kecuali project sudah punya target audience/analytics yang menunjukkan
+kebutuhan berbeda (inspeksi dulu kalau ada data), matrix default untuk
+cross-browser testing:
+
+**Desktop**: Chrome (2 versi terbaru), Firefox (2 versi terbaru), Safari
+(2 versi terbaru, kalau ada akses macOS), Edge (versi terbaru).
+**Mobile**: Safari iOS (2 versi terbaru), Chrome Android (versi
+terbaru).
+
+Kalau tidak ada akses ke semua browser di atas (misal tidak ada macOS
+untuk Safari), laporkan sebagai `NOT VERIFIED` untuk browser yang tidak
+bisa dites — jangan klaim sudah dites kalau belum.
+
+Kalau project punya data analytics real user (Google Analytics, dst)
+yang menunjukkan browser/device berbeda dominan dipakai user, prioritas
+matrix mengikuti data itu, bukan default di atas.
+
 ## TESTING SCOPE
 Evaluasi: happy path, fitur yang diminta, input invalid/hilang, empty
 state, error state, edge case, kegagalan API/database, auth/authz,

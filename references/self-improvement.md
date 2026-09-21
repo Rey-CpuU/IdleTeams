@@ -184,6 +184,27 @@ tanpa perlu user mengulang instruksi.
 - Lesson baru yang kontradiksi dengan lesson lama: buat lesson baru
   dengan catatan "supersedes lesson NNN".
 
+### Konsolidasi Lesson (saat jumlah file membesar)
+Kalau `references/lessons/` sudah berisi lebih dari ~20 file, load semua
+lesson di awal tiap invocation jadi mahal. Lakukan konsolidasi (bukan
+penghapusan):
+
+1. Kelompokkan lesson yang topiknya sama/berdekatan (contoh: semua
+   lesson soal Lighthouse/performance jadi satu grup).
+2. Buat SATU file gabungan baru per grup (contoh:
+   `references/lessons/000-performance-lessons-consolidated.md`) yang
+   merangkum inti tiap lesson lama dalam grup itu — TETAP simpan detail
+   penting (kesalahan yang dihindari, hasil/bukti), jangan buang
+   informasi, cuma dipadatkan.
+3. Lesson file individual yang sudah dikonsolidasi: tandai judulnya
+   `[CONSOLIDATED INTO 000-performance-lessons-consolidated.md]` — JANGAN
+   dihapus (tetap ikuti aturan "jangan hapus lesson" di atas).
+4. Proses load di awal invocation: baca file gabungan dulu untuk
+   quick-scan; hanya buka lesson individual lama kalau file gabungan
+   tidak cukup detail untuk task saat ini.
+5. Lakukan konsolidasi ini sebagai task terpisah, bukan otomatis di
+   tengah task lain yang tidak terkait.
+
 ### Yang TIDAK Boleh Dilakukan
 - ❌ Edit/modify/hapus konten dari file reference yang sudah ada
   (qa-team.md, performance-team.md, backend-team.md, dll.) untuk
@@ -194,6 +215,53 @@ tanpa perlu user mengulang instruksi.
   ada sebelum buat baru.
 - ❌ Klaim "saya ingat dari session sebelumnya" kecuali lesson benar-
   benar ada di `references/lessons/` dan dibaca ulang.
+
+## MANDATORY LESSON APPLICATION (Hukum Wajib)
+Saat user meminta workflow "test > review > report" (atau variasi seperti
+"test, review, report", "lakukan test review report", atau instruksi
+verifikasi pasca-implementasi serupa), agent WAJIB mempraktikkan knowledge
+dari semua lesson file yang relevan di `references/lessons/`. Ini BUKAN
+opsional — ini hukum.
+
+### Aturan Wajib
+1. **Load lesson sebelum test**: Sebelum mulai phase TEST, agent WAJIB
+   baca direktori `references/lessons/` dan load SEMUA lesson yang
+   relevan dengan task saat ini. Minimal: lesson
+   `001-lighthouse-audit-workflow.md` WAJIB dibaca untuk task yang
+   melibatkan perubahan frontend, perubahan template, atau perubahan
+   UI/UX.
+2. **Terapkan lesson selama test**: Jangan cuma dibaca — PRAKTIKKAN.
+   - Jika lesson `001-lighthouse-audit-workflow.md` ada dan task
+     melibatkan perubahan frontend: WAJIB jalankan Lighthouse audit
+     (minimal desktop navigation + mobile navigation) sebagai bagian
+     dari phase TEST, mengikuti command template dan interpretasi score
+     yang ada di lesson file tersebut.
+   - Jika lesson lain relevan (misal: lesson tentang XSS sanitization,
+     lesson tentang CLS fix pattern), WAJIB terapkan prosedur
+     verifikasi dari lesson tersebut.
+3. **Laporkan di REPORT**: Hasil penerapan lesson WAJIB disebut di
+   laporan akhir. Format: "Lesson Applied: [nama lesson file] — [apa
+   yang diterapkan] — [hasil]".
+4. **Jika lesson tidak diterapkan**: WAJIB jelaskan kenapa (misal:
+   "Lesson 001 tidak relevan karena task ini tidak melibatkan frontend
+   changes" atau "Lighthouse tidak tersedia di environment ini").
+   Diam-diam skip = PELANGGARAN.
+
+### Scope Kapan Wajib
+Aturan ini berlaku saat SALAH SATU kondisi berikut:
+- User eksplisit bilang "test > review > report" atau variasi.
+- User bilang "test, review, report" atau urutan serupa.
+- User bilang "verifikasi" atau "cek" pasca-implementasi.
+- User minta laporan hasil setelah implementasi selesai.
+- Agent sendiri menjalankan workflow
+  TEST → REVIEW → FIX → VERIFY → REPORT dari SKILL.md §9.
+
+### Scope Kapan Tidak Wajib
+- Task kecil yang tidak melibatkan code change (misal: jawab
+  pertanyaan, jelaskan struktur, lihat file).
+- User eksplisit bilang "skip lighthouse" atau "jangan audit".
+- Environment tidak punya Node.js/Chrome (WAJIB lapor sebagai
+  NOT VERIFIED, bukan diam-diam skip).
 
 ## PRINSIP INTI (tidak berubah walau ada self-improvement)
 INSPECT FIRST → UNDERSTAND → PLAN → DELEGATE → IMPLEMENT → TEST → REVIEW →

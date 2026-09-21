@@ -30,7 +30,7 @@ untuk task ini. Jangan load semua reference sekaligus untuk task kecil.
 
 | Task | Load |
 |---|---|
-| UI-only | SKILL.md + ui-ux-team.md + frontend-team.md |
+| UI-only | SKILL.md + design-team.md (jika perlu arah visual) + ui-ux-team.md + frontend-team.md |
 | Backend/API | SKILL.md + backend-team.md |
 | Database | SKILL.md + backend-team.md + database-team.md |
 | Security review | SKILL.md + security-team.md |
@@ -46,7 +46,7 @@ tabel kalau perlu.
 
 | Jenis Request | Tim yang di-spawn |
 |---|---|
-| UI/visual only (styling, layout, redesign) | UI/UX, Frontend, QA (responsive+a11y) |
+| UI/visual only (styling, layout, redesign) | Design, UI/UX, Frontend, QA (responsive+a11y) |
 | Authentication | Backend, Frontend, Security, QA |
 | Authorization/RBAC | Backend, Security, QA |
 | Database feature (schema/model baru) | Backend, Database, Security, QA |
@@ -60,8 +60,8 @@ tabel kalau perlu.
 | Third-party API integration | Backend, Security, QA |
 | Feature flag / rollout | Backend, QA, Security (jika flag sensitive) |
 | Caching strategy | Backend, Database (server-cache), Frontend (client-cache), Performance |
-| Website lengkap dari nol | Product Analysis, UI/UX, Frontend, Backend, Database, Security, QA, DevOps |
-| Request vague ("bikin lebih modern") | Product Analysis dulu → tentukan tim lanjutan dari hasil analisis |
+| Website lengkap dari nol | Discovery Interview dulu (multi-agent.md §Discovery Interview) → Product Analysis, Design, UI/UX, Frontend, Backend, Database, Security, QA, DevOps |
+| Request vague ("bikin lebih modern") / redesign besar | Discovery Interview dulu (multi-agent.md §Discovery Interview) → tentukan tim lanjutan dari hasil analisis |
 
 ============================================================
 2. PRIMARY OBJECTIVES (urutan prioritas)
@@ -138,6 +138,7 @@ control hanya karena bikin development lebih gampang.
 |---|---|
 | Team Lead / Orchestrator | references/multi-agent.md |
 | Product Analysis | references/multi-agent.md |
+| Design (Creative Direction) | references/design-team.md |
 | UI/UX Design | references/ui-ux-team.md |
 | Frontend / UI Logic | references/frontend-team.md |
 | Backend | references/backend-team.md |
@@ -147,6 +148,13 @@ control hanya karena bikin development lebih gampang.
 | Performance | references/performance-team.md |
 | DevOps / Infrastructure | references/devops-team.md |
 | Self-Improvement (skills + memory) | references/self-improvement.md |
+
+**Pipeline visual**: Design → UI/UX → Frontend, berurutan (bukan paralel) —
+tiap tahap butuh output tahap sebelumnya. Design tentukan arah kreatif &
+bahasa visual; UI/UX terjemahkan jadi struktur UX konkret & spec component;
+Frontend implementasi kode. Untuk task UI kecil/tertarget yang tidak
+menyentuh arah visual (misal "perbaiki spacing card ini"), Design boleh
+di-skip — mulai dari UI/UX atau langsung Frontend sesuai lingkup.
 
 Struktur org chart lengkap (tim → sub-role) ada di multi-agent.md — tidak
 diulang di sini.
@@ -197,6 +205,14 @@ web, bukan opsional yang perlu ditanyakan. Tanya user HANYA saat keputusan
 genuinely butuh input user: preferensi bisnis, aksi destruktif, credential/
 secret, keputusan irreversible, atau informasi yang tidak bisa disimpulkan
 aman dari project.
+
+**Pengecualian**: untuk project baru dari nol atau redesign besar, Discovery
+Interview (multi-agent.md §Discovery Interview) WAJIB jalan dulu sebelum
+implementasi — ini bukan pelanggaran prinsip di atas, karena arah produk/
+teknis/visual untuk project baru genuinely cuma user yang tahu, bukan
+sesuatu yang bisa "diasumsikan biar cepat jalan". Di luar konteks itu
+(task kecil/tertarget di project existing), prinsip "jangan tanya kalau
+bisa disimpulkan" tetap berlaku penuh.
 
 Agent tetap otonom hanya DI DALAM scope yang diberikan (lihat §5) — tidak
 boleh melebar ke sistem tak terkait, aksi destruktif tanpa otorisasi, atau
