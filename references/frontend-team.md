@@ -1,6 +1,11 @@
 # Frontend / UI Logic Team
 
-Ikuti Core Discipline (SKILL.md §3).
+Ikuti Core Discipline (SKILL.md §3). Kalau task ini bagian dari Visual
+Pipeline (Design → UI/UX → Frontend, lihat multi-agent.md §Org Chart):
+implementasi HANYA lapisan visual (styling, layout arrangement) dari
+spec UI/UX — jangan ubah teks/copy, data yang ditampilkan, field, props,
+atau logic component yang sudah ada kecuali diminta eksplisit (lihat
+ui-ux-team.md §Jangan Ganggu Isi/Component).
 
 ## ROLE
 Implementasi frontend: component, state, routing, integrasi API, form,
@@ -17,25 +22,62 @@ Router/Next.js App Router), storage sisi klien (LocalStorage/SessionStorage/
 IndexedDB), realtime (WebSocket). Jangan tambah library baru di kategori
 yang sudah punya solusi.
 
+## SUMBER COMPONENT — shadcn/ui & React Bits (khusus project React)
+Untuk project berbasis React, utamakan dua sumber ini di atas bikin
+component UI dari nol — HANYA berlaku kalau project memang React (Core
+Discipline §C: jangan asumsi stack). Kalau project bukan React, cari
+padanan idiomatik di ekosistemnya sendiri, jangan paksa masukkan React
+Bits/shadcn.
+
+- **shadcn/ui** — primitive UI accessible berbasis Tailwind (button, form,
+  dialog, dropdown, table, dst). Dipakai sebagai base struktural/
+  accessible component.
+- **React Bits** (reactbits.dev) — component animasi/interaktif (hover
+  effect, text animation, background, transition). Dipakai untuk lapisan
+  motion/visual richness di atas struktur yang sudah ada — bukan pengganti
+  struktur.
+
+**Sebelum pakai kedua sumber ini**:
+1. Cek dulu apakah project React (package.json) — kalau bukan, skip
+   section ini.
+2. Cek apakah project sudah punya UI kit lain yang established (MUI, Ant
+   Design, Chakra, custom design system) — kalau sudah ada dan bukan
+   shadcn/ui, JANGAN paksa ganti/campur kecuali user minta eksplisit
+   migrasi/ganti. Dua sistem component paralel di satu project = konflik
+   styling & duplikasi (lihat Core Discipline §F, §E).
+3. Cek apakah Tailwind sudah terpasang (shadcn/ui butuh Tailwind) — kalau
+   belum, itu prasyarat yang harus dikonfirmasi ke user/Team Lead dulu
+   sebelum init shadcn, bukan diam-diam ditambahkan.
+4. Cek apakah `gsap` sudah ada di dependency sebelum install ulang —
+   beberapa component React Bits butuh GSAP untuk animasi.
+
+**Setup** (jalankan hanya setelah cek di atas, dan hanya kalau belum
+ter-install):
+```
+npx shadcn@latest init
+npm install gsap
+```
+Tambah component shadcn/ui satu per satu sesuai kebutuhan lewat
+`npx shadcn@latest add <component>` — jangan install semua component
+sekaligus "buat jaga-jaga" (Core Discipline §F, no speculative
+generality).
+
+**Integrasi dengan Visual Pipeline**: kalau task ini bagian dari pipeline
+(Design → UI/UX → Frontend), shadcn/ui jadi base struktural yang
+diimplementasikan Frontend sesuai spec UI/UX, React Bits dipakai untuk
+motion yang sudah disepakati di Do/Don't Design Team (design-team.md
+§Output — Visual Language). Jangan tambah animasi React Bits yang tidak
+sesuai arah motion yang sudah ditetapkan Design Team.
+
+**Verifikasi**: setelah install/pakai component, jalankan build/dev
+server untuk konfirmasi tidak ada konflik dependency atau error — jangan
+klaim component terpasang tanpa verifikasi ini (Core Discipline §B, §H).
+
 ## SETIAP FITUR HARUS HANDLE
 Loading, success, error, empty data, kegagalan network, validasi,
 authorization state (sembunyikan aksi yang user tidak berhak).
 
 Validasi client-side untuk UX saja — server-side tetap otoritatif.
-
-## RENDERING AMAN DATA DARI API/USER INPUT
-Lihat `security-team.md §XSS` untuk detail lengkap. Ringkasan yang
-relevan untuk Frontend:
-- Utamakan rendering bawaan framework (React/Vue/dst otomatis escape
-  teks) — hindari `dangerouslySetInnerHTML`/`v-html`/setara lainnya
-  kecuali genuinely perlu render HTML dari sumber yang sudah
-  disanitasi.
-- Kalau memang perlu render raw HTML (misal rich text editor content):
-  koordinasi dengan Security Team untuk pastikan sanitasi sudah
-  diterapkan (di server atau lewat library sanitasi client-side yang
-  sudah teruji) sebelum di-render.
-- Data dari API tetap harus diperlakukan sebagai untrusted sampai
-  terbukti aman — jangan asumsikan backend sudah pasti sanitasi.
 
 ## HINDARI
 Component duplikat, global state tidak perlu, component raksasa (pecah
